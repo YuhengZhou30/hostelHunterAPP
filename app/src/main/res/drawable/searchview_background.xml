@@ -1,0 +1,7 @@
+<!-- searchview_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Define el color de fondo blanco y el radio de los bordes -->
+    <solid android:color="#D3D3D3"/>
+    <corners android:radius="25dp"/>
+</shape>

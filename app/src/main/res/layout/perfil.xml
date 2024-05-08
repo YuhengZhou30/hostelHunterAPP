@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- ImageView -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:src="@drawable/pensar1"
+    android:layout_gravity="center_horizontal"
+    android:scaleType="fitCenter"/>
+
+    <!-- TextView -->
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Nombre"
+        android:textSize="18sp" />
+
+    <!-- TextView Clicable 1 -->
+    <TextView
+        android:id="@+id/Perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_gravity="center_horizontal|left"
+        android:clickable="true"
+        android:onClick="onClickTextView1"
+        android:text="Perfil"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+    <!-- TextView Clicable 2 -->
+    <TextView
+        android:id="@+id/logout"
+
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_gravity="center_horizontal|left"
+        android:clickable="true"
+        android:onClick="onClickTextView2"
+        android:text="Cerrar Session"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+</LinearLayout>

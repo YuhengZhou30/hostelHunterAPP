@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HostelHunter"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".Welcome.WelcomeSlidesActivity"
+            android:exported="true">
+            <!-- Definir configuraciones adicionales de la actividad si es necesario -->
+        </activity>
+        <activity android:name=".UserActions.LoginActivity" />
+        <activity android:name=".UserActions.RegistroActivity" />
+        <activity android:name="com.hh.hostelhunter.ui.item" />
+        <activity android:name=".ui.notifications.EditarPerfil">
+            <!-- Aquí puedes añadir atributos adicionales como etiquetas, iconos, etc. -->
+        </activity>
+        <activity android:name=".ui.ui" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+
+</manifest>
