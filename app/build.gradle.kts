@@ -31,12 +31,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
     implementation ("com.google.api-client:google-api-client:1.32.1")
     implementation ("com.google.api-client:google-api-client-android:1.32.1")
-    implementation ("com.google.apis:google-api-services-drive:v3-rev20210801-1.32.1")
     implementation ("com.github.bumptech.glide:glide:4.13.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.13.0")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.5")

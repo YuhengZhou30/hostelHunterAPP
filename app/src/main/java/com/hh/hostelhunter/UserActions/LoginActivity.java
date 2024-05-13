@@ -92,17 +92,23 @@ public class LoginActivity extends AppCompatActivity {
                     Datos_memoria.usuarioLogin = new User(editTextEmail.getText().toString(), editTextPassword.getText().toString());
                     CompletableFuture<String> resultFuture = sendHttpPostRequest("https://hostelhunter.ieti.site/api/usuari/login", Datos_memoria.usuarioLogin.toString());
                     resultFuture.thenAccept(result -> {
-                        System.out.println("Response: " + result);
+                        System.out.println("Login: " + result);
                         JsonNode rootNode = null;
                         try {
+
                             // Analizar el JSON
                             rootNode = respuesta.readTree(result);
-                            Datos_memoria.usuarioLogin.setUsername("pepe");
-                            Datos_memoria.usuarioLogin.setPhoneNumber("1111");
+                            JsonNode dataNode = rootNode.get("data");
+                            Datos_memoria.usuarioLogin.setUsername(removeQuotes(dataNode.get("nombre").toString()));
+                            Datos_memoria.usuarioLogin.setPhoneNumber(removeQuotes(dataNode.get("telefono").toString()));
+                            Datos_memoria.usuarioLogin.setEmail(removeQuotes(dataNode.get("gmail").toString()));
+                            Datos_memoria.usuarioLogin.setId(dataNode.get("id").asInt());
+                            Datos_memoria.usuarioLogin.setUrlFoto(dataNode.get("url").toString());
+                            System.out.println(Datos_memoria.usuarioLogin.getId());
                             // Obtener el valor de "nombre" dentro de "data"
 
                             //String nombreValue = rootNode.get("data").get("nombre").asText();
-                            System.out.println("pepe");
+                            System.out.println( Datos_memoria.usuarioLogin);
                             startActivity(new Intent(LoginActivity.this, com.hh.hostelhunter.ui.ui.class));
                             finish();
                         } catch (JsonProcessingException e) {
@@ -145,6 +151,9 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    private String removeQuotes(String value) {
+        return value.replaceAll("\"", "");
     }
 
 }

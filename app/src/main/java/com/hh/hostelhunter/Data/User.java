@@ -6,12 +6,14 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
-
+    private String urlFoto;
+    private int id;
     public User(String username, String phoneNumber, String email, String password) {
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+        this.urlFoto="";
     }
 
     public User( String email, String password) {
@@ -29,6 +31,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPhoneNumber() {
@@ -53,6 +63,15 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    // Setter para urlFoto
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
+    }
+
+    // Getter para urlFoto
+    public String getUrlFoto() {
+        return urlFoto;
     }
 
     @Override

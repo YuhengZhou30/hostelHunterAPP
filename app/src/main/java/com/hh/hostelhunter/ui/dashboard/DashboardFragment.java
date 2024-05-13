@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
         System.out.println("pedir");
         CompletableFuture<String>  res=sendHttpGetRequest("https://hostelhunter.ieti.site/api/informacion/android?page="+Page+"&size=6");
         res.thenAccept(result -> {
-            System.out.println("Response: " + result);
+            //System.out.println("Response: " + result);
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 JsonNode rootNode = objectMapper.readTree(result);

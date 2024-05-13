@@ -1,10 +1,16 @@
 package com.hh.hostelhunter.ui.notifications;
 
 import static com.hh.hostelhunter.Data.Datos_memoria.sendHttpPostRequest;
+import static com.hh.hostelhunter.Data.Datos_memoria.usuarioLogin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Environment;
+import android.util.Base64;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -19,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.android.material.textfield.TextInputLayout;
@@ -29,13 +36,21 @@ import com.hh.hostelhunter.R;
 import com.hh.hostelhunter.Welcome.SlideFragment3;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class EditarPerfil extends AppCompatActivity {
     private SlideFragment3 slideFragment3;
     private ActivityResultLauncher<String> pickImageLauncher;
-
+    private String base64Img="";
     private TextInputLayout textInputLayoutUsername;
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutTlf;
@@ -63,7 +78,12 @@ public class EditarPerfil extends AppCompatActivity {
         editTextEmail.setText( Datos_memoria.usuarioLogin.getEmail());
         editTextTlf.setText( Datos_memoria.usuarioLogin.getPhoneNumber());
         buttonSave = findViewById(R.id.buttonSave);
-        imageButton.setImageResource(R.drawable.pensar1);
+
+
+        Glide.with(this)
+                .load(usuarioLogin.getUrlFoto())
+                .centerInside()
+                .into(imageButton);
         editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -109,7 +129,13 @@ public class EditarPerfil extends AppCompatActivity {
                 if (result != null) {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result);
+                        System.out.println(bitmap.getByteCount());
+                        // Convertir el bitmap a array de bytes
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
                         imageButton.setImageBitmap(bitmap);
+                        base64Img=bitmapToBase64(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -137,18 +163,38 @@ public class EditarPerfil extends AppCompatActivity {
                     buttonSave.setEnabled(false);
                     buttonSave.setText("Espera...");
                     System.out.println(Datos_memoria.usuarioLogin.toString());
-                    CompletableFuture<String> resultFuture = sendHttpPostRequest("https://hostelhunter.ieti.site/api/usuari/login", Datos_memoria.usuarioLogin.toString());
+
+                    String[] partes = base64Img.split("\n");
+                    // Unir las partes con un espacio como separador
+                    base64Img = String.join("", partes);
+
+                    partes = base64Img.split("\\\\");
+                    // Unir las partes con un espacio como separador
+                    base64Img = String.join("", partes);
+                    JSONObject msgJSON=null;
+                    try {
+                        msgJSON = new JSONObject();
+                        msgJSON.put("nombre", editTextName.getText());
+                        msgJSON.put("telefono", editTextTlf.getText());
+                        msgJSON.put("email", editTextEmail.getText());
+                        msgJSON.put("id", Datos_memoria.usuarioLogin.getId());
+                        msgJSON.put("base64",base64Img );
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    CompletableFuture<String> resultFuture = sendHttpPostRequest("https://hostelhunter.ieti.site/api/usuari/update", msgJSON.toString());
                     resultFuture.thenAccept(result -> {
                         System.out.println("Response: " + result);
                         JsonNode rootNode = null;
                         try {
                             // Analizar el JSON
                             rootNode = respuesta.readTree(result);
+                            usuarioLogin.setUrlFoto(rootNode.get("data").get("url").asText());
+                            usuarioLogin.setEmail(rootNode.get("data").get("gmail").asText());
+                            usuarioLogin.setPhoneNumber(rootNode.get("data").get("telefono").asText());
+                            usuarioLogin.setUsername(rootNode.get("data").get("nombre").asText());
 
-                            // Obtener el valor de "nombre" dentro de "data"
-
-                            //String nombreValue = rootNode.get("data").get("nombre").asText();
-                            System.out.println("pepe");
                             startActivity(new Intent(EditarPerfil.this, com.hh.hostelhunter.ui.ui.class));
                             finish();
                         } catch (JsonProcessingException e) {
@@ -172,5 +218,84 @@ public class EditarPerfil extends AppCompatActivity {
             }
         });
     }
+
+    public static String[] dividirCadena(String base64, int longitudSegmento) {
+        int totalPartes = (base64.length() + longitudSegmento - 1) / longitudSegmento; // Redondeo hacia arriba
+        String[] partes = new String[totalPartes];
+        for (int i = 0; i < totalPartes; i++) {
+            partes[i] = base64.substring(i * longitudSegmento, Math.min((i + 1) * longitudSegmento, base64.length()));
+        }
+        return partes;
+    }
+    public static String bitmapToBase64(Bitmap bitmap) {
+        // Verificar si el bitmap es nulo
+        if (bitmap == null) {
+            return null;
+        }
+
+        // Convertir el bitmap a un array de bytes
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+        // Codificar el array de bytes a una cadena Base64
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+    public String saveBitmapToInternalStorage(Bitmap bitmap) {
+        Context context = getApplicationContext();
+        String fileName = "imagen.jpg";
+
+        try {
+            // Obtener la ruta del directorio de archivos internos
+            File directory = context.getFilesDir();
+            File file = new File(directory, fileName);
+
+            // Convertir el bitmap en un archivo JPEG y guardarlo en el almacenamiento interno
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.close();
+
+            // Devolver la ruta del archivo guardado
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Manejar cualquier error que pueda ocurrir durante la escritura del archivo
+            return null;
+        }
+    }
+
+
+    public Bitmap readBitmapFromInternalStorage(String filePath) {
+        try {
+            File internalDir = getFilesDir();
+            // Abre el archivo en modo de lectura
+            FileInputStream fis = new FileInputStream(internalDir+filePath);
+
+            // Lee los bytes del archivo en un arreglo de bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            byte[] bytes = baos.toByteArray();
+
+            // Decodifica el arreglo de bytes en un objeto Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+            // Cierra el flujo de entrada
+            fis.close();
+            baos.close();
+
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Maneja cualquier error que pueda ocurrir durante la lectura del archivo
+            return null;
+        }
+    }
+
+
+
 
 }
