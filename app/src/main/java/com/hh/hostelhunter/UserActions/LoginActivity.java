@@ -3,6 +3,7 @@ import static android.app.PendingIntent.getActivity;
 import static com.hh.hostelhunter.Data.Datos_memoria.sendHttpPostRequest;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.buttonLogin);
         recu_contra = findViewById(R.id.textViewForgotPassword);
         backButton = findViewById(R.id.buttonBack);
+        buttonLogin.setBackgroundColor(Color.parseColor("#FF000000"));
+
         editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -105,9 +108,6 @@ public class LoginActivity extends AppCompatActivity {
                             Datos_memoria.usuarioLogin.setId(dataNode.get("id").asInt());
                             Datos_memoria.usuarioLogin.setUrlFoto(dataNode.get("url").toString());
                             System.out.println(Datos_memoria.usuarioLogin.getId());
-                            // Obtener el valor de "nombre" dentro de "data"
-
-                            //String nombreValue = rootNode.get("data").get("nombre").asText();
                             System.out.println( Datos_memoria.usuarioLogin);
                             startActivity(new Intent(LoginActivity.this, com.hh.hostelhunter.ui.ui.class));
                             finish();
@@ -118,12 +118,11 @@ public class LoginActivity extends AppCompatActivity {
                                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Comprueba el usuario y contraseña1", Toast.LENGTH_SHORT).show());
                             }
 
+                        }catch (Exception e) {
+                            e.printStackTrace();
+
                         }
                         // Hacer algo con la respuesta
-                    }).exceptionally(exception -> {
-                        // Mostrar un Toast si hay un error en la conexión
-                        runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Comprueba el usuario y contraseña2", Toast.LENGTH_SHORT).show());
-                        return null;
                     });
 
                     buttonLogin.setEnabled(true);

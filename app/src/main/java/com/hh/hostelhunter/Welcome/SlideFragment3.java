@@ -1,5 +1,6 @@
 package com.hh.hostelhunter.Welcome;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,8 @@ public class SlideFragment3 extends Fragment {
         TextView textView = view.findViewById(R.id.nombre);
         textView.setText("Dejanos ayudar con esto");
         // Set image resource
-        imageView.setImageResource(R.drawable.pensar3); // Reemplaza 'your_image' con el nombre de tu imagen en drawable
+        imageView.setImageResource(R.drawable.hoster_hunter); // Reemplaza 'your_image' con el nombre de tu imagen en drawable
+
 
         // Configura el listener para el botón de iniciar sesión
         iniciarSesionButton = view.findViewById(R.id.button2);
@@ -58,7 +60,8 @@ public class SlideFragment3 extends Fragment {
                 }
             }
         });
-
+        registrarButton.setBackgroundColor(Color.parseColor("#FF000000"));
+        iniciarSesionButton.setBackgroundColor(Color.parseColor("#FF000000"));
         return view;
     }
 }

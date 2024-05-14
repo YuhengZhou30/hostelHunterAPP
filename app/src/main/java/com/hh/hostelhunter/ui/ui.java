@@ -67,8 +67,8 @@ public class ui extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DashboardFragment(), "Dashboard");  // Se añade el nombre del fragmento como segundo argumento
-        adapter.addFragment(new PerfilView(), "Notifications");  // Se añade el nombre del fragmento como segundo argumento
+        adapter.addFragment(new DashboardFragment(), "Casas");  // Se añade el nombre del fragmento como segundo argumento
+        adapter.addFragment(new PerfilView(), "Perfil");  // Se añade el nombre del fragmento como segundo argumento
         viewPager.setAdapter(adapter);
     }
 

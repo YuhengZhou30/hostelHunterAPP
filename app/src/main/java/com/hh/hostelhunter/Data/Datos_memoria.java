@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 public class Datos_memoria{
     public static User usuario;
     public static User usuarioLogin;
+    public static int PrecioActual;
 
 
     public static CompletableFuture<String> sendHttpPostRequest(final String urlStr, final String postData) {

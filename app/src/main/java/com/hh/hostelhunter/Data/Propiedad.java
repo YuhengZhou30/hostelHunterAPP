@@ -1,8 +1,10 @@
 package com.hh.hostelhunter.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Propiedad  implements Serializable {
+    private int ID=-1;
     private String Propietario="";
     private String nombre="";
     private String descripcion="";
@@ -10,7 +12,9 @@ public class Propiedad  implements Serializable {
     private int capacidad=-1;
     private String reglas="";
     private double precioPorNoche=-1;
-    private String urlFoto="";
+    private ArrayList<String> urlFoto= new ArrayList<>();
+
+    private int likes=0;
 
     // Constructor vacío
     public Propiedad() {
@@ -23,6 +27,21 @@ public class Propiedad  implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
     public String getPropietario() {
         return Propietario;
@@ -72,11 +91,11 @@ public class Propiedad  implements Serializable {
         this.precioPorNoche = precioPorNoche;
     }
 
-    public String getUrlFoto() {
+    public ArrayList<String> getUrlFoto() {
         return urlFoto;
     }
 
-    public void setUrlFoto(String urlFoto) {
+    public void setUrlFoto( ArrayList<String> urlFoto) {
         this.urlFoto = urlFoto;
     }
 

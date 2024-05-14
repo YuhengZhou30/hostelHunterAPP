@@ -194,8 +194,7 @@ public class EditarPerfil extends AppCompatActivity {
                             usuarioLogin.setEmail(rootNode.get("data").get("gmail").asText());
                             usuarioLogin.setPhoneNumber(rootNode.get("data").get("telefono").asText());
                             usuarioLogin.setUsername(rootNode.get("data").get("nombre").asText());
-
-                            startActivity(new Intent(EditarPerfil.this, com.hh.hostelhunter.ui.ui.class));
+                            runOnUiThread(() -> Toast.makeText(EditarPerfil.this, "Cambios guardados", Toast.LENGTH_SHORT).show());
                             finish();
                         } catch (JsonProcessingException e) {
                             String Value = rootNode.get("status").asText();

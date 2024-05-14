@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.hh.hostelhunter.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
@@ -35,7 +36,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         ListItem item = items.get(position);
         Glide.with(holder.itemView.getContext())
-                .load(item.getImageResource())
+                .load(item.getImageResource().get(0))
                 .centerInside()
                 .into(holder.imageView);
 
@@ -81,17 +82,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 }
 
 class ListItem {
-    private String imageResource;
+    private ArrayList<String> imageResource;
     private String title;
     private String description;
 
-    public ListItem(String  imageResource, String title, String description) {
+    public ListItem(ArrayList<String>  imageResource, String title, String description) {
         this.imageResource = imageResource;
         this.title = title;
         this.description = description;
     }
 
-    public String getImageResource() {
+    public ArrayList<String> getImageResource() {
         return imageResource;
     }
 
