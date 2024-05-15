@@ -14,7 +14,7 @@ public class Propiedad  implements Serializable {
     private double precioPorNoche=-1;
     private ArrayList<String> urlFoto= new ArrayList<>();
 
-    private int likes=0;
+    private String likes="";
 
     // Constructor vacío
     public Propiedad() {
@@ -36,11 +36,11 @@ public class Propiedad  implements Serializable {
     public void setID(int ID) {
         this.ID = ID;
     }
-    public int getLikes() {
+    public String getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(String likes) {
         this.likes = likes;
     }
     public String getPropietario() {

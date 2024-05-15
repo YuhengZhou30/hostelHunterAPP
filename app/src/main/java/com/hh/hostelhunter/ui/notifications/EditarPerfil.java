@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
@@ -78,7 +79,7 @@ public class EditarPerfil extends AppCompatActivity {
         editTextEmail.setText( Datos_memoria.usuarioLogin.getEmail());
         editTextTlf.setText( Datos_memoria.usuarioLogin.getPhoneNumber());
         buttonSave = findViewById(R.id.buttonSave);
-
+        buttonSave.setBackgroundColor(Color.parseColor("#FF000000"));
 
         Glide.with(this)
                 .load(usuarioLogin.getUrlFoto())
@@ -195,6 +196,9 @@ public class EditarPerfil extends AppCompatActivity {
                             usuarioLogin.setPhoneNumber(rootNode.get("data").get("telefono").asText());
                             usuarioLogin.setUsername(rootNode.get("data").get("nombre").asText());
                             runOnUiThread(() -> Toast.makeText(EditarPerfil.this, "Cambios guardados", Toast.LENGTH_SHORT).show());
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("urlFoto", usuarioLogin.getUrlFoto());
+                            setResult(RESULT_OK, resultIntent);
                             finish();
                         } catch (JsonProcessingException e) {
                             String Value = rootNode.get("status").asText();

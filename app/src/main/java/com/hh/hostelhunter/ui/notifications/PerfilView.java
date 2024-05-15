@@ -1,5 +1,6 @@
 package com.hh.hostelhunter.ui.notifications;
 
+import static android.app.Activity.RESULT_OK;
 import static com.hh.hostelhunter.Data.Datos_memoria.usuarioLogin;
 
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.hh.hostelhunter.R;
 import com.hh.hostelhunter.UserActions.LoginActivity;
 
 public class PerfilView extends Fragment {
+    static int EDITAR_PERFIL_REQUEST_CODE=1;
     TextView perfil,logout,nombre;
     ImageView imageView;
     @Nullable
@@ -45,10 +47,10 @@ public class PerfilView extends Fragment {
         perfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(getContext(), com.hh.hostelhunter.ui.notifications.EditarPerfil.class));
+                startActivityForResult(new Intent(getContext(), EditarPerfil.class), EDITAR_PERFIL_REQUEST_CODE);
             }
         });
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +62,22 @@ public class PerfilView extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDITAR_PERFIL_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Aquí actualizas la foto del perfil utilizando la URL obtenida de EditarPerfil
+                String nuevaUrlFoto = data.getStringExtra("urlFoto");
+                // Actualiza la foto del perfil con la nueva URL
+                Glide.with(this)
+                        .load(nuevaUrlFoto)
+                        .centerInside()
+                        .into(imageView);
+            }
+        }
     }
 
 }

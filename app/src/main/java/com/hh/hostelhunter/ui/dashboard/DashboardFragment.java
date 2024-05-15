@@ -2,6 +2,7 @@ package com.hh.hostelhunter.ui.dashboard;
 
 import static com.hh.hostelhunter.Data.Datos_memoria.sendHttpGetRequest;
 import static com.hh.hostelhunter.Data.Datos_memoria.sendHttpPostRequest;
+import static com.hh.hostelhunter.Data.Datos_memoria.usuarioLogin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -130,8 +131,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void generateItemList2(int Page) {
-        System.out.println("pedir");
-        CompletableFuture<String>  res=sendHttpGetRequest("https://hostelhunter.ieti.site/api/informacion/android?page="+Page+"&size=6");
+        CompletableFuture<String>  res=sendHttpGetRequest("https://hostelhunter.ieti.site/api/informacion/android?page="+Page+"&size=6&usuarioid="+usuarioLogin.getId());
         res.thenAccept(result -> {
             System.out.println("Response: " + result);
             ObjectMapper objectMapper = new ObjectMapper();
@@ -152,7 +152,7 @@ public class DashboardFragment extends Fragment {
                     propiedad.setReglas(node.path("reglas").asText());
                     propiedad.setUrlFoto(jsonNodeToList(node.path("urlFoto")));
                     propiedad.setCapacidad(node.path("capacidad").asInt());
-                    propiedad.setLikes(node.path("likes").asInt());
+                    propiedad.setLikes(node.path("likes").asText());
                     propiedad.setPrecioPorNoche(node.path("precioPorNoche").asDouble());
                     //System.out.println(propiedad.toString());
                     items.add(new ListItem(propiedad.getUrlFoto(), propiedad.getNombre(), propiedad.getPrecioPorNoche() + ""));
